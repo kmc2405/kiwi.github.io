@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>End_Page</title>
+    <!-- 폰트 선언 -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/Dalgona/neodgm-webfont@1.510/neodgm_code/style.css">
+<style>
+    body {
+        font-family: 'NeoDunggeunmo Code';
+        background-image: url('./img/end_page.png');
+    }
+    * {
+        margin:0;
+        padding:0;
+    }
+    
+    #p_1 {
+        color: white;
+        text-align: center;
+        font-size: 3rem;
+        font-weight: 100;
+        position: absolute;
+        top:50%;
+        left:50%;
+        width:100%;
+        transform:translate(-50%, -50%);
+        opacity: 0;
+        animation: fadeIn_1 4s forwards;
+        animation-delay: 1s;
+    }
+
+    #p_2 {
+        color: white;
+        text-align: center;
+        font-size: 3rem;
+        font-weight: 100;
+        position: absolute;
+        top:50%;
+        left:50%;
+        width:100%;
+        transform:translate(-50%, -50%);
+        opacity:0;
+        animation: fadeIn_1 4s forwards;
+        animation-delay: 5.3s;
+    }
+
+    #p_3 {
+        color: white;
+        text-align: center;
+        font-size: 3rem;
+        font-weight: 100;
+        position: absolute;
+        top:50%;
+        left:50%;
+        width:100%;
+        transform:translate(-50%, -50%);
+        opacity:0;
+        animation: fadeIn_2 6s forwards;
+        animation-delay: 8s;
+    }
+
+    @keyframes fadeIn_1 {
+        0% {
+        opacity: 0; 
+        }
+        50% {
+        opacity: 1; 
+        }
+        100% {
+        opacity: 0; 
+        }
+        }
+        @keyframes fadeIn_2 {
+        to {
+        opacity: 1; 
+        }
+        }
+</style>
+</head>
+<body>
+    <p id='p_1'>키위새는 그저 날고 싶었을뿐이었다...</p>
+    <p id='p_2'>모두 키위새에게 애도를...</p>
+    <p id='p_3'>Fin.</p>
+<script>
+     setTimeout(function() {
+            window.location.href = 'index.html';
+        }, 15000);
+</script>
+</body>
+</html>

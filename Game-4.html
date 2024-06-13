@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 폰트 선언 -->
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/Dalgona/neodgm-webfont@1.510/neodgm_code/style.css">
+    <style>
+        * {
+            margin:0;
+            padding:0;
+        }
+        body {
+            position: relative;
+            background-color: black;
+        }
+        #map {
+            position: absolute;
+            border: 1px solid black;
+            position:relative;
+            margin: auto;
+            width: 800px;
+            height: 970px;
+            background-color: rgb(106, 106, 106);
+            display: flex;
+            justify-content: center;
+            text-align: center;
+        }
+        #start {
+            font-family: 'NeoDunggeunmo Code';
+            font-size: 5rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: start 2s forwards;
+        }
+        .kiwi {
+            position: absolute;
+            margin-top: 50px;
+            width: 85px;
+            height: 175px;
+            transition: 0.5 ease;
+            z-index: 999;
+            background: url('./img/kiwi.png') no-repeat;
+            background-size: cover;
+        }
+        .kiwi.active_1 {
+            animation: blink_1 1.5s forwards;
+        }
+        .kiwi.active_2 {
+            animation: blink_2 1.5s forwards;
+        }
+        .kiwi.active_3 {
+            display: none;
+        }
+        .kiwi[data-direction='right'] {
+            background-position: -104px 0px;
+        }
+
+        .kiwi[data-direction='left'] {
+            background-position: -214px 0px;
+        }
+        .box[data-direction='up'] {
+            background-position: 0 0px;
+        }
+
+        .box[data-direction='down'] {
+            background-position: 0 0px;
+        }
+        .heart {
+            width: 78px;
+            height: 47px;
+            margin: 5px 20px 0 0;
+            float: right;
+            transition:0.5 ease;
+            background-image: url('./img/heart.png');
+            background-position: center;
+            background-size: cover;
+            display: none;
+        }
+
+        .heart_1.active {
+            display: none;
+        }
+        .heart_2.active {
+            display: none;
+        }
+        .heart_3.active {
+            display: none;
+        }
+
+        #score {
+            font-family: 'NeoDunggeunmo Code';
+            font-size: 2rem;
+            display:inline;
+            animation: blink_1 1s infinite;
+            animation-delay: 0.5s;
+            opacity: 1;
+            color: black;
+        }
+        #header_box {
+            position: absolute;
+            width: 800px;
+            top: 0;
+            left: 50%;
+            transform: translate(-50%);
+            z-index: 1;
+            padding: 10px;
+            margin-left: 10px;
+        }
+        #superitem {
+            width: 600px;
+            height: 750px;
+            margin-top: 100px;
+            animation: fadeIn_item 1s forwards;
+            display: none;
+            transition: 0.5 ease;
+        }
+        #superitem_text {
+            font-family: 'NeoDunggeunmo Code';
+            font-size: 5rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: fadeIn 3s forwards;
+            color: rgb(235, 230, 89);
+            transition: 0.5 ease;
+            display: none;
+        }
+
+        #shild {
+            position: absolute;
+            width: 800px;
+            height: 20px;
+            top: 65%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgb(235, 230, 89);
+            opacity: 45%;
+            display: none;
+        }
+        #alert {
+            position: absolute;
+            width: 313px;
+            height: 433px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-image: url('./img/phase3.png');
+            background-position: center;
+            background-size: cover;
+            z-index: 1000;
+            text-align: center;
+            display:none
+        }
+        #alert p {
+            font-family: 'NeoDunggeunmo Code';
+            font-size: 1.2rem;
+            width: 85%;
+            position: absolute;
+            top: 71%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+        }
+        #alert p span {
+            color: rgb(255, 0, 0);
+        }
+        #alert_gameover {
+            position: absolute;
+            width: 313px;
+            height: 433px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-image: url('./img/gameover_frame.png');
+            background-position: center;
+            background-size: cover;
+            z-index: 1000;
+            text-align: center;
+            display: none;
+        }
+        #alert_gameover p {
+            font-family: 'NeoDunggeunmo Code';
+            font-size: 1.2rem;
+            width: 80%;
+            position: absolute;
+            top: 73%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+        }
+        #alert_gameover span {
+            font-size: 1.5rem;
+            color: rgb(255, 0, 0);
+        }
+        #alert_gameover a {
+            text-decoration: none;
+            color: black;
+        }
+        #alert_gameover a:hover {
+            color: red;
+        }
+        /* 키프레임 구현 */
+        @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+        }
+
+        @keyframes fadeIn_item {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 30%;
+        }
+        }
+        
+        @keyframes start {
+        0% {
+        opacity: 0; 
+        }
+        20% {
+        opacity: 1;     
+        }
+        40% {
+        opacity: 0; 
+        }
+        60% {
+        opacity: 1; 
+        }
+        100% {
+        opacity: 0; 
+        } 
+        }
+
+        @keyframes blink_1 {
+        0% {
+        opacity: 1; 
+        }
+        20% {
+        opacity: 0;     
+        }
+        40% {
+        opacity: 1; 
+        }
+        60% {
+        opacity: 0; 
+        }
+        100% {
+        opacity: 1; 
+        }
+        }
+
+        @keyframes blink_2 {
+        0% {
+        opacity: 1; 
+        }
+        20% {
+        opacity: 0;     
+        }
+        40% {
+        opacity: 1; 
+        }
+        60% {
+        opacity: 0; 
+        }
+        100% {
+        opacity: 1; 
+        }
+        }
+     </style>
+</head>
+<body>
+    <div id='header_box'>
+            <p id="score"></p>
+            <div class="heart heart_1"></div>
+            <div class="heart heart_2"></div>
+            <div class="heart heart_3"></div>
+    </div>
+    <div id="map">
+        <img id='superitem' src="./img/zespri2.png" width='500' height='600'>
+        <p id="start">FLY!!!</p>
+        <p id="superitem_text">골드키위의<br> 가호를<br> 받습니다</p>
+        <div id='shild'></div>
+        <div class="kiwi" data-direction="down"></div>
+    </div>
+<script>
+    // 플레이어 움직임 구현
+    let kiwi = document.querySelector('.kiwi');
+    let map = document.querySelector('#map');
+
+    document.addEventListener('keydown', (e) => {
+        let currentX = parseInt(getComputedStyle(kiwi).left);
+        let currentY = parseInt(getComputedStyle(kiwi).top);
+        let currentDirection = 'down';
+
+        let mapRect = map.getBoundingClientRect();
+        let playerRect = kiwi.getBoundingClientRect();
+
+        if(e.key === 'ArrowLeft') {
+            if(currentX - 100 >= 0) {
+                kiwi.style.left = (currentX - 100) + 'px';
+                currentDirection = 'left'
+            }
+        }
+        else if(e.key === 'ArrowRight') {
+            if(currentX + 100 <= mapRect.width - playerRect.width) {
+                kiwi.style.left = (currentX + 100) + 'px';
+                currentDirection = 'right'
+            }
+        }
+        else if(e.key === 'ArrowUp') {
+            if(currentY - 100 >= 0) {
+                kiwi.style.top = (currentY - 100) + 'px';
+                currentDirection = 'up'
+            }
+        }
+        else if(e.key === 'ArrowDown') {
+            if(currentY + 100 <= mapRect.height - playerRect.height) {
+                kiwi.style.top = (currentY + 100) + 'px';
+                currentDirection = 'down'
+            }  
+        }
+        kiwi.dataset.direction = currentDirection;
+    })
+    
+
+
+    
+    // 공통 변수
+    let score = 0;
+    let life = 2;
+    let heart_1 = document.querySelector('.heart_1');
+    let heart_2 = document.querySelector('.heart_2');
+    let heart_3 = document.querySelector('.heart_3');
+    let zespri = document.getElementById('superitem');
+    let zespriT = document.getElementById('superitem_text');
+    let shild = document.getElementById('shild');
+    let scoreText = document.getElementById('score');
+    let popup_1 = document.getElementById('alert');
+    let popup_2 = document.getElementById('alert_gameover');
+    console.log(life);
+
+    // 장애물 생성 구현 >> 4단계 : 피할 수 없는 운명
+    function createObstacle() {
+    let minX = 400;  // map 의 간격 최소점, 500
+    let maxX = 1200; // map 의 간격 최대점, 1070
+    let obstacle = document.createElement('div');
+    obstacle.style.width = '220px';
+    obstacle.style.height = '100px';
+    obstacle.style.backgroundImage = "url('./img/obstacle4.png')";
+    obstacle.style.backgroundSize = 'cover';
+    obstacle.style.backgroundPosition = 'center';
+    obstacle.style.position = 'absolute';
+    obstacle.style.left = `${minX + Math.random() * (maxX - minX)}px`;
+    obstacle.style.bottom = '0';
+    obstacle.style.Zindex = '999';
+    document.body.appendChild(obstacle); 
+    
+    // 장애물 움직임 구현
+    let rise = setInterval(() => {
+    let bottom = parseInt(obstacle.style.bottom) || 0;
+    obstacle.style.bottom = `${bottom + 1}px`; // 이동속도 조절 
+
+    if (top > window.innerHeight) {
+      clearInterval(rise);
+      document.body.removeChild(obstacle);
+    }
+
+    // 장애물 충돌 이벤트 구현
+    let playerRect = kiwi.getBoundingClientRect();
+    let obstacleRect = obstacle.getBoundingClientRect();
+    let shildRect = shild.getBoundingClientRect();
+
+    if (
+      playerRect.bottom >= obstacleRect.top &&
+      playerRect.top <= obstacleRect.bottom &&
+      playerRect.right >= obstacleRect.left &&
+      playerRect.left <= obstacleRect.right 
+    ) {
+        if(life === 3) {
+            heart_1.classList.add('active');
+            kiwi.classList.add('active_1');
+            life -= 1;
+            clearInterval(rise);
+            document.body.removeChild(obstacle);
+            console.log(life);
+        }
+        else if(life === 2) {
+            heart_2.classList.add('active');
+            kiwi.classList.add('active_2');
+            life -= 1;
+            clearInterval(rise);
+            document.body.removeChild(obstacle);
+            kiwi.classList.add('active');
+        }
+        else if(life === 1) {
+            heart_3.classList.add('active');
+            kiwi.classList.add('active_3');
+            clearInterval(rise);
+            document.body.removeChild(obstacle);
+            window.location.href = 'End_Page.html';
+        }
+    }
+    else if (shildRect.bottom >= obstacleRect.top) {
+        document.body.removeChild(obstacle);
+    }
+  }, 10);
+
+  score ++;
+  scoreText.textContent = '언제까지 날 수 있을까??'
+  
+
+  // 페이즈 구현
+  if(score === 70) { 
+    popup_1.style.display = "block"; // 팝업창
+    scoreText.style.display = "none";
+    function move() {
+            window.location.href = 'Game-4.html';
+        }
+    setTimeout(move, 3000); //3초 뒤에 다음 페이즈로
+ }
+}
+setInterval(createObstacle, 300); // 0.3초에 한번씩 생성
+
+// 슈퍼 아이템 생성
+function createItem() {
+    let minX = 600;  // map 의 간격 최소점, 600
+    let maxX = 1250; // map 의 간격 최대점, 1250
+    let Item = document.createElement('div');
+    Item.position = 'absolute';
+    Item.style.width = '130px';
+    Item.style.height = '110px';
+    Item.style.position = 'absolute';
+    Item.style.backgroundImage = "url('./img/zespri.png')";
+    Item.style.backgroundSize = "cover";
+    Item.style.backgroundPosition = "center";
+    Item.style.left = `${minX + Math.random() * (maxX - minX)}px`;
+    Item.style.bottom = '0';
+    document.body.appendChild(Item);
+
+    let rise = setInterval(() => {
+    let bottom = parseInt(Item.style.bottom) || 0;
+    Item.style.bottom = `${bottom + 5.5}px`; // 이동속도 조절
+    
+    
+    if (top > window.innerHeight) {
+      clearInterval(rise);
+      document.body.removeChild(Item);
+    }
+
+    // 아이템 충돌 이벤트 구현
+    let playerRect = kiwi.getBoundingClientRect();
+    let itemRect = Item.getBoundingClientRect();
+    if (
+      playerRect.bottom >= itemRect.top &&
+      playerRect.top <= itemRect.bottom &&
+      playerRect.right >= itemRect.left &&
+      playerRect.left <= itemRect.right
+    ) { 
+        zespri.style.display = "block";
+        zespriT.style.display = "block";
+        shild.style.display = "block";
+        document.body.removeChild(Item);
+        kiwi.style.backgroundImage = "url('./img/goldenkiwi.png')";
+
+        function rechange() {
+            kiwi.style.backgroundImage= "url('./img/kiwi.png')";
+            superitem.style.display = "none";
+            zespriT.style.display = "none";
+            shild.style.display = "none";
+        }
+        setTimeout(rechange, 1500); //1.5초 뒤에 원상 복귀 
+    }
+    })
+}
+setInterval(createItem, 6500); //6.5초에 한번씩 생성
+
+
+// 배경 텍스트1
+function createCloud() {
+    let minX = 600;  // map 의 간격 최소점, 600
+    let maxX = 1200; // map 의 간격 최대점, 1200
+    let cloud = document.createElement('div');
+    cloud.position = 'absolute';
+    cloud.style.width = '250px';
+    cloud.style.height = '75px';
+    cloud.style.position = 'absolute';
+    cloud.style.backgroundImage = "url('./img/obstacle4-1.png')";
+    cloud.style.backgroundSize = "cover";
+    cloud.style.backgroundPosition = "center";
+    cloud.style.left = `${minX + Math.random() * (maxX - minX)}px`;
+    cloud.style.bottom = '0';
+    document.body.appendChild(cloud);
+
+    let rise = setInterval(() => {
+    let bottom = parseInt(cloud.style.bottom) || 0;
+    cloud.style.bottom = `${bottom + 2.5}px`; // 이동속도 조절
+    
+    
+    if (top > window.innerHeight) {
+      clearInterval(rise);
+      document.body.removeChild(cloud);
+    }
+    })
+}
+setInterval(createCloud, 2500); // 2.5초에 한번씩 생성
+
+// 배경 텍스트2
+function createCloud2() {
+    let minX = 600;  // map 의 간격 최소점, 600
+    let maxX = 1100; // map 의 간격 최대점, 1100
+    let cloud2 = document.createElement('div');
+    cloud2.position = 'absolute';
+    cloud2.style.width = '450px';
+    cloud2.style.height = '130px';
+    cloud2.style.position = 'absolute';
+    cloud2.style.backgroundImage = "url('./img/obstacle4-2.png')";
+    cloud2.style.backgroundSize = "cover";
+    cloud2.style.backgroundPosition = "center";
+    cloud2.style.left = `${minX + Math.random() * (maxX - minX)}px`;
+    cloud2.style.bottom = '0';
+    document.body.appendChild(cloud2);
+
+    let rise = setInterval(() => {
+    let bottom = parseInt(cloud2.style.bottom) || 0;
+    cloud2.style.bottom = `${bottom + 1}px`; // 이동속도 조절
+    
+    
+    if (top > window.innerHeight) {
+      clearInterval(rise);
+      document.body.removeChild(cloud2);
+    }
+    })
+}
+setInterval(createCloud2, 3500); // 3.5초에 한번씩 생성
+
+// 오브젝트의 랜덤 위치 생성 및 이동속도 조절은 chat-gpt로 참고한 부분이 있음을 밝힙니다!
+// 추가로 키위새를 구원 시킬 수있는 이벤트를 구현하고싶었으나 시간관계상 기획한 부분 까지 완성
+</script>
+</body>
+</html>

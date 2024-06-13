@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>키위새는 날고싶어!</title>
+    <style>
+         body {
+            position: relative;
+            width: 100%;
+            height: 1080px;
+            background-image: url('./img/guide_page.png');
+        }
+        * {
+            margin:0;
+            padding:0;
+        }
+        a {
+            text-decoration: none;
+            color: black;
+        }
+        a:hover {
+            color: red;
+        }
+        a:active {
+            color: rgb(224, 255, 49);
+        }
+        #start {
+            position: absolute;
+            top: 88%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 122px;
+            height: 71px;
+            margin: 0 0 15px 10px;
+            background-image: url('./img/play.png');
+        
+        }
+        #start:hover {
+            width: 160px;
+            background-image: url('./img/play_active.png');
+            background-size: cover;
+            background-position: center;
+        }
+        #arrow {
+            width: 180px;
+            height: 126px;
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            background-image: url('./img/arrow.png');
+            background-size: cover;
+            background-position: center;
+        }
+        #arrow:hover {
+            width: 230px;
+            height: 135px;
+            position: absolute;
+            background-image: url('./img/arrow_active.png');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body>
+    <a href='./index.html'><div id="arrow"></div></a>
+    <a href='./story-1.html'><div id="start"></div></a>
+</body>
+</html>
